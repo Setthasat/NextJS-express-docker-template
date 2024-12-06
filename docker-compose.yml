@@ -1,12 +1,24 @@
 version: '3.8'
 
 services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo-container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    restart: always
+
   client:
     build:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ./client:/app
 
@@ -18,3 +30,7 @@ services:
       - "8889:8888"
     volumes:
       - ./server:/app
+
+volumes:
+  mongo-data:
+    driver: local
